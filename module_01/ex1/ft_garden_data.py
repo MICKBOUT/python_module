@@ -8,12 +8,13 @@ class Plant:
         self.age_days = age_days
 
 
-rose = Plant("Rose", 25, 30)
-sunflower = Plant("Sunflower", 80, 45)
-cactus = Plant("Cactus", 15, 120)
-plants = [rose, sunflower, cactus]
-
 if __name__ == "__main__":
+    plants = [
+        Plant("Rose", 25, 30),
+        Plant("Sunflower", 80, 45),
+        Plant("Cactus", 15, 120),
+    ]
+
     print("=== Garden Plant Registry ===")
     for plant in plants:
         print(f"{plant.name}: {plant.height}cm, {plant.age_days} days old")

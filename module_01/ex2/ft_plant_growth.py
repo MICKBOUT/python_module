@@ -6,26 +6,25 @@ class Plant:
         self.name = name
         self.height_cm = height
         self.age_days = age_days
-        self.grow_this_week = 0
+        self.last_grow = 0
 
     def grow(self, size: int) -> None:
         self.height_cm += size
-        self.grow_this_week = size
+        self.last_grow = size
 
     def age(self, days: int) -> None:
         self.age_days += days
 
     def get_info(self) -> int:
-        return self.grow_this_week
+        return self.last_grow
 
-
-plants = [
-    Plant("Rose", 25, 30),
-    Plant("Sunflower", 80, 45),
-    Plant("Cactus", 15, 120),
-]
 
 if __name__ == "__main__":
+    plants = [
+        Plant("Rose", 25, 30),
+        Plant("Sunflower", 80, 45),
+        Plant("Cactus", 15, 120),
+    ]
     print("=== Day 1 ===")
     for plant in plants:
         print(f"{plant.name}: {plant.height_cm}cm, {plant.age_days} days old")
