@@ -10,7 +10,7 @@ class Plant:
 
 class Flower(Plant):
     """
-    Class Flower inherits for class Plant whit color atribut
+    Class Flower inherits for class Plant with color atribut
     """
     def __init__(self, name: str, height: int, age_days: int,
                  color: str) -> None:
@@ -27,7 +27,7 @@ class Flower(Plant):
 
 class Tree(Plant):
     """
-    Class Tree inherits for class Plant whit other atribut
+    Class Tree inherits for class Plant with other atribut
     """
     def __init__(self, name: str, height: int, age_days: int,
                  trunk_diameter: int) -> None:
@@ -44,7 +44,7 @@ class Tree(Plant):
 
 class Vegetable(Plant):
     """
-    Class Vegetable inherits for class Plant whit other atribut
+    Class Vegetable inherits for class Plant with other atribut
     """
     def __init__(self, name: str, height: int, age_days: int,
                  harvest_season: str, nutritional_value) -> None:
