@@ -9,11 +9,10 @@ def water_plants(plant_list: list):
     try:
         print("Opening watering system")
         for plant in plant_list:
-            if plant is None:
-                raise Exception(f"cannot water '{plant}'")
+            plant[1]
             print(f"Watering {plant}")
-    except Exception as e:
-        print(e)
+    except Exception:
+        print(Exception(f"Cannot water '{plant}'"))
     finally:
         print("Closing watering system")
 
