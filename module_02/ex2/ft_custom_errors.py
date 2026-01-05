@@ -2,7 +2,7 @@ class GardenError(Exception):
     """
     Error class that defines the behavior of its subclass.
     """
-    message = "The garden has a probleme"
+    message = "The garden has a problem"
 
     def __init__(self):
         super().__init__(self.message)
