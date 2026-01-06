@@ -20,9 +20,15 @@ class Plant:
         self.type = "Plant"
 
     def get_data(self) -> None:
+        """
+        print data in the plant
+        """
         print(f"{self.name}, {self.height}cm")
 
     def grow(self, size: int) -> None:
+        """
+        grow the plant by {size} cm
+        """
         self.grown += size
         self.height += size
 
@@ -33,10 +39,16 @@ class FloweringPlant(Plant):
     """
     def __init__(self, name: str, starting_height: int, color: str):
         super().__init__(name, starting_height)
+        """
+        init the plant
+        """
         self.color = color
         self.type = "FloweringPlant"
 
     def get_data(self):
+        """
+        print data on the plant
+        """
         print(f"{self.name}, {self.height}cm, {self.color} (Blooming)")
 
 
@@ -51,6 +63,9 @@ class PrizeFlower(FloweringPlant):
         self.type = "PrizeFlower"
 
     def get_data(self):
+        """
+        print data on the plant
+        """
         print(f"{self.name}, {self.height}cm, {self.color} (Blooming), \
 {self.prizePoints} Prize points")
 
@@ -63,26 +78,44 @@ class Garden:
 
     @staticmethod
     def border(size: int) -> str:
+        """
+        return the size str of bottom border
+        """
         return '=' * size
 
     @classmethod
     def add_total_plant_count(cls) -> None:
+        """
+        increase the total plant count
+        """
         cls.totalPlant += 1
 
     @classmethod
     def get_total_plant_count(cls) -> int:
+        """
+        return the total plant count
+        """
         return cls.totalPlant
 
     def __init__(self, name: str) -> None:
+        """
+        init the class
+        """
         self.name = name
         self.plants: list[Plant] = []
 
     def add_plant(self, plant) -> None:
+        """
+        add a plant
+        """
         self.plants.append(plant)
         Garden.add_total_plant_count()
         print(f"{plant.name} added to {self.name}'s garden")
 
     def get_plant(self) -> None:
+        """
+        print info the current garden
+        """
         print(f"=============== {self.name}'s Garden ===============")
         print("Plants in this garden :")
         for plant in self.plants:
@@ -104,17 +137,26 @@ class Garden:
         print(Garden.border((ft_len(self.name) + 41)))
 
     def grow_all_plants(self, size: int) -> None:
+        """
+        grow all plants of this garden
+        """
         print(f"{self.name} grow all Plants by {size}cm")
         for plant in self.plants:
             plant.grow(size)
 
     def get_grow(self) -> int:
+        """
+        get the growth of the current garden\
+        """
         growth = 0
         for plant in self.plants:
             growth += plant.grown
         return growth
 
     def get_score(self) -> int:
+        """
+        get the score of the garden
+        """
         score = 0
         for plant in self.plants:
             if plant.type == "PrizeFlower":
@@ -123,6 +165,9 @@ class Garden:
         return score
 
     def height_validation(self) -> bool:
+        """
+        validate the height of garden
+        """
         for plant in self.plants:
             if plant.starting_height + plant.grown != plant.height:
                 return False
@@ -139,41 +184,65 @@ class GardenManager:
         """
 
         def __init__(self, manager) -> None:
+            """
+            init this class
+            """
             self.manager = manager
 
         def count_plants_network(self) -> int:
+            """
+            count the number of plant in this network
+            """
             nb = 0
             for garden in self.manager.network:
                 nb += ft_len(garden.plants)
             return nb
 
         def count_growth_network(self) -> int:
+            """
+            count the total growth of this network
+            """
             growth = 0
             for garden in self.manager.network:
                 growth += garden.get_grow()
             return growth
 
         def height_validation(self) -> bool:
+            """
+            validate the height of the network
+            """
             for garden in self.manager.network:
                 if not garden.height_validation():
                     return False
             return True
 
         def garden_score(self) -> None:
+            """
+            calculate the score of the garden
+            """
             print("Garden Scores :")
             for garden in self.manager.network:
                 print(f"- {garden.name}: {garden.get_score()}")
 
         def total_garden(self) -> int:
+            """
+            total garden count
+            """
             return ft_len(self.manager.network)
 
     network = []
 
     @classmethod
     def create_garden_network(cls, garden: Garden) -> None:
+        """
+        create garden network
+        """
         cls.network.append(garden)
 
     def __init__(self):
+        """
+        init
+        """
         self.stats = GardenManager.GardenStats(self)
 
 

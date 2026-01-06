@@ -14,13 +14,22 @@ class Flower(Plant):
     """
     def __init__(self, name: str, height: int, age_days: int,
                  color: str) -> None:
+        """
+        inti the class Flower
+        """
         super().__init__(name, height, age_days)
         self.color = color
 
     def bloom(self) -> None:
+        """
+        print that the plant is blooming
+        """
         print(f"{self.name} is blooming")
 
     def get_info(self):
+        """
+        print various info on the plant
+        """
         print(f"{self.name} (Flower): {self.height}cm, {self.age_days} days, \
 {self.color} color")
 
@@ -31,13 +40,22 @@ class Tree(Plant):
     """
     def __init__(self, name: str, height: int, age_days: int,
                  trunk_diameter: int) -> None:
+        """
+        init the class
+        """
         super().__init__(name, height, age_days)
         self.trunk_diameter = trunk_diameter
 
     def produce_shade(self, area: int) -> None:
+        """
+        print info on the shade area status
+        """
         print(f"{self.name} provide {area} square meters of shade")
 
     def get_info(self):
+        """
+        print various info on the plant
+        """
         print(f"{self.name} (Tree): {self.height}cm, {self.age_days} days \
 {self.trunk_diameter}cm diameter")
 
@@ -48,14 +66,23 @@ class Vegetable(Plant):
     """
     def __init__(self, name: str, height: int, age_days: int,
                  harvest_season: str, nutritional_value) -> None:
+        """
+        init the vegatable
+        """
         super().__init__(name, height, age_days)
         self.harvest_season = harvest_season
         self.nutritional_value = nutritional_value
 
     def nutritional(self) -> None:
+        """
+        get nutritional info
+        """
         print(f"{self.name} is rich in {self.nutritional_value}")
 
     def get_info(self):
+        """
+        print various info whit this vegatable
+        """
         print(f"{self.name} (Vegetable): {self.height}cm, \
 {self.age_days} days, {self.harvest_season} harvest")
 

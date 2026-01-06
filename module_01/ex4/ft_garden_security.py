@@ -4,6 +4,9 @@ class SecurePlant:
         Blueprint of a plant with secure methode to avoid corupted data.
     """
     def __init__(self, name: str, age: int, height: int) -> None:
+        """
+        init the class
+        """
         self.name = name
         if age < 0:
             print("[REJECTED] Age: Security negative Value")
@@ -18,9 +21,16 @@ class SecurePlant:
         print(f"Plant created: {name}")
 
     def get_height(self) -> int:
+        """
+        get the height of the class in a secure way
+        """
         return self._height
 
     def set_height(self, height: int) -> None:
+        """
+        set the height of the class in a secure way :
+        rejecte if the height is invalde
+        """
         if height < 0:
             print(f"[REJECTED] Invalid operation attempted: {height}cm")
             print("Security: Negative height rejected")
@@ -28,9 +38,15 @@ class SecurePlant:
             self._height = height
 
     def get_age(self) -> int:
+        """
+        get the age of the plant
+        """
         return self._age
 
     def set_age(self, age: int) -> None:
+        """
+        set the age of the plant
+        """
         if age < 0:
             print(f"[REJECTED] Invalid operation attempted: {age} days")
             print("Security: Negative age rejected")

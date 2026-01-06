@@ -3,6 +3,9 @@ class Plant:
     Blueprint of a plant with attibutes Name, height and age
     """
     def __init__(self, name: str, height: int, age_days: int) -> None:
+        """
+        init the plant
+        """
         self.name = name
         self.height = height
         self.age_days = age_days
