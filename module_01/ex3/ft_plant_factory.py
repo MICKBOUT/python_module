@@ -43,7 +43,8 @@ class factory:
         """
         a factory that create plant
         """
-        return Plant(data)
+        name, height, age = data
+        return Plant(name, height, age)
 
 
 if __name__ == "__main__":
