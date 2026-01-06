@@ -21,13 +21,19 @@ player_achievements = [alice, bob, charlie]
 
 
 def commonAchievement(player_achievements: list[str, set]) -> set:
+    """
+    return a set w/ all the achievments present in at least one player list
+    """
     common_set = player_achievements[0][1]
     for _, achievement in player_achievements[1:]:
-        common_set = common_set & achievement
+        common_set = common_set.intersection(achievement)
     return common_set
 
 
 def ultraRareAchievement(player_achievements: list[str, set]) -> set:
+    """
+    return a set w/ only achivment obteine by one person
+    """
     seen_once = set()
     seen_many_time = set()
 
@@ -46,13 +52,21 @@ def competition(first_player: tuple, second_player: tuple) -> None:
     """
     competition b/w two player
     """
-    print(f"{first_player[0]} vs {second_player[0]} \
-common: {first_player[1] & second_player[1]}")
-    print(f"{first_player[0]} unique: {first_player[1] - second_player[1]}")
-    print(f"{second_player[0]} unique: {second_player[1] - first_player[1]}")
+    first_name, first_achievement = first_player
+    second_name, second_achievement = second_player
+
+    print(f"{first_name} vs {second_name} \
+common: {first_achievement.intersection(second_achievement)}")
+    print(f"{first_name} unique: \
+{first_achievement.difference(second_achievement)}")
+    print(f"{second_name} unique: \
+{second_achievement.difference(first_achievement)}")
 
 
 def AchievementTrackerTester():
+    """
+    A script that the the exercie w/ basic test and print it
+    """
     print("=== Achievement Tracker System ===\n")
 
     for name, achievements in player_achievements:
