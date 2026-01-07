@@ -27,7 +27,7 @@ def distance(end_pos, starting_pos: tuple = (0, 0, 0)):
     print(f"Distance between {starting_pos} and {end_pos}: {dist}")
 
 
-def parcingSting(data: str) -> tuple:
+def parcing_sting(data: str) -> tuple:
     """
     parce a string and return the tuple of the x, y, z
     if an error ocurre, raise the error
@@ -49,19 +49,19 @@ def parcingSting(data: str) -> tuple:
     return pos
 
 
-def manageString(string: str) -> None:
+def manage_string(string: str) -> None:
     """
     procec the string and handle if an error ocure
     """
     try:
-        pos = parcingSting(string)
+        pos = parcing_sting(string)
     except Exception as e:
         print(f"Error details - Type: {type(e).__name__}, Args: ({e})")
     else:
         distance(pos)
 
 
-def testerCoordinateSystem():
+def tester_coordinate_system():
     """
     a tester fonction that show example of how the code work
     """
@@ -73,16 +73,16 @@ def testerCoordinateSystem():
 
     valide_string = "3,4,0"
     print(f'\nParcing coordinates: "{valide_string}"')
-    manageString(valide_string)
+    manage_string(valide_string)
 
     invalide_string = "abc,def,ghi"
     print(f'\nParcing invalid coordinates: "{invalide_string}"')
-    manageString(invalide_string)
+    manage_string(invalide_string)
 
 
 if __name__ == "__main__":
-    testerCoordinateSystem()
+    tester_coordinate_system()
 
     for user_string in sys.argv[1:]:
         print(f'\nParcing user string: "{user_string}"')
-        manageString(user_string)
+        manage_string(user_string)

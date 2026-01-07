@@ -20,7 +20,7 @@ charlie = ("charlie", {
 player_achievements = [alice, bob, charlie]
 
 
-def commonAchievement(player_achievements: list[str, set]) -> set:
+def common_achievement(player_achievements: list[str, set]) -> set:
     """
     return a set w/ all the achievments present in at least one player list
     """
@@ -30,7 +30,7 @@ def commonAchievement(player_achievements: list[str, set]) -> set:
     return common_set
 
 
-def ultraRareAchievement(player_achievements: list[str, set]) -> set:
+def ultra_rare_achievement(player_achievements: list[str, set]) -> set:
     """
     return a set w/ only achivment obteine by one person
     """
@@ -63,7 +63,7 @@ common: {first_achievement.intersection(second_achievement)}")
 {second_achievement.difference(first_achievement)}")
 
 
-def AchievementTrackerTester():
+def achievement_tracker_tester():
     """
     A script that the the exercie w/ basic test and print it
     """
@@ -77,11 +77,11 @@ def AchievementTrackerTester():
     print(f"All unique achievements: {all_achievement}")
     print(f"total Achievements: {len(all_achievement)}\n")
 
-    print(f"Common to all players: {commonAchievement(player_achievements)}")
+    print(f"Common to all players: {common_achievement(player_achievements)}")
     print(f"Rare achievements (1 player): \
-{ultraRareAchievement(player_achievements)}\n")
+{ultra_rare_achievement(player_achievements)}\n")
     competition(alice, bob)
 
 
 if __name__ == "__main__":
-    AchievementTrackerTester()
+    achievement_tracker_tester()

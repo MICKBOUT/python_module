@@ -14,7 +14,7 @@ player_dict = {
 }
 
 
-def inventoryValue(inventory: dict) -> int:
+def inventory_value(inventory: dict) -> int:
     """
     return the value of the inventory of the player
     """
@@ -24,7 +24,7 @@ def inventoryValue(inventory: dict) -> int:
     return inventory_value
 
 
-def inventoryCount(inventory: dict) -> int:
+def inventory_count(inventory: dict) -> int:
     """
     return the number of the item in the inventory of the player
     """
@@ -34,7 +34,7 @@ def inventoryCount(inventory: dict) -> int:
     return inventory_count
 
 
-def displayInventory(inventory: dict) -> None:
+def display_inventory(inventory: dict) -> None:
     """
     display the inventory of a player
     """
@@ -44,8 +44,8 @@ def displayInventory(inventory: dict) -> None:
         print(f"{name} ({category}, {rarity}): \
 {count}x @ {value} gold each = {count * value} gold")
 
-    print(f"\nInventory value: {inventoryValue(inventory)} gold")
-    print(f"Item count: {inventoryCount(inventory)} items")
+    print(f"\nInventory value: {inventory_value(inventory)} gold")
+    print(f"Item count: {inventory_count(inventory)} items")
     # s = "Categories: " +\
     #     ", ".join(f"{key}({value})" for key, value in category_count.items())
     str_categories_count = "Categories:"
@@ -69,36 +69,36 @@ def transaction(donor: dict, receiver: dict, item: str, quantity: int) -> int:
     else:
         receiver[item] = \
             donor[item][0], donor[item][1], quantity, donor[item][3]
-    if donor[item] <= 0:
+    if donor[item][2] <= 0:
         donor.pop(item)
     print("Transaction successful!")
     return 1
 
 
-def mostValuable(player_dict: dict) -> str:
+def most_valuable(player_dict: dict) -> str:
     """
     return a str w/ the most valuable platyer in the given list
     or "No player found" if no player were found
     """
     most_valuable = (None, float("-inf"))
     for name, inventory in player_dict.items():
-        inventory_value = inventoryValue(inventory)
-        if inventory_value > most_valuable[1]:
-            most_valuable = (name, inventory_value)
+        value = inventory_value(inventory)
+        if value > most_valuable[1]:
+            most_valuable = (name, value)
     if most_valuable[0] is None:
         return "No player found"
     else:
         return f"{most_valuable[0]} ({most_valuable[1]} gold)"
 
 
-def mostItems(player_dict: dict) -> str:
+def most_items(player_dict: dict) -> str:
     """
     reture the player w/ the bigest number of item
     or "No player found" if no player were found
     """
     most_item = (None, float("-inf"))
     for name, inventory in player_dict.items():
-        inventory_value = inventoryCount(inventory)
+        inventory_value = inventory_count(inventory)
         if inventory_value > most_item[1]:
             most_item = (name, inventory_value)
     if most_item[0] is None:
@@ -107,7 +107,7 @@ def mostItems(player_dict: dict) -> str:
         return f"{most_item[0]} ({most_item[1]} items)"
 
 
-def rareItems(player_dict: dict) -> str:
+def rare_items(player_dict: dict) -> str:
     """
     return a str containing all rare item present in any invenrory
     """
@@ -120,12 +120,12 @@ def rareItems(player_dict: dict) -> str:
     return f"{rare_items}"[1:-1]
 
 
-def PlayerInventoryTester():
+def Player_inventory_tester():
     """
     a tester that print test for this subject
     """
     print("=== Player Inventory System ===\n")
-    displayInventory(alice)
+    display_inventory(alice)
 
     print("\n=== Transaction: Alice gives Bob 2 potions ===")
     transaction(alice, bob, "potion", 2)
@@ -135,10 +135,10 @@ def PlayerInventoryTester():
     print(f"Bob potions: {bob['potion'][2]}")
 
     print("\n=== Inventory Analytics ===")
-    print(f"Most valuable player: {mostValuable(player_dict)}")
-    print(f"Most items: {mostItems(player_dict)}")
-    print(f"Rarest items: {rareItems(player_dict)}")
+    print(f"Most valuable player: {most_valuable(player_dict)}")
+    print(f"Most items: {most_items(player_dict)}")
+    print(f"Rarest items: {rare_items(player_dict)}")
 
 
 if __name__ == "__main__":
-    PlayerInventoryTester()
+    Player_inventory_tester()
