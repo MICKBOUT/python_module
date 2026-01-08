@@ -270,9 +270,10 @@ data = {
 
 
 def analytics_dashboard() -> None:
-
+    """
+    A simple analytics to show how comprehensions lst works
+    """
     print("=== List ===")
-
     player_list = [player for player in data['players'].keys()]
     print(f"Playerl list : {player_list}")
 
@@ -280,16 +281,54 @@ def analytics_dashboard() -> None:
     above_average_score = sorted(
         [score for score in scores
          if score > (sum(scores) / len(scores))], reverse=True)
-    print(f"score above average : {above_average_score}")
+    print(f"Score above average : {above_average_score}")
+
+    game_time = sorted([mode['duration_minutes'] for mode in data['sessions']])
+    print(f"Game time : {game_time}")
 
     print("\n=== Dict ===")
     game_mode = {ell for ell in data['game_modes']}
-    lst = [mode['mode'] for mode in data['sessions']]
-    game_played = {ell: lst.count(ell) for ell in game_mode}
+    lst_mode = [mode['mode'] for mode in data['sessions']]
+    game_played = {ell: lst_mode.count(ell) for ell in game_mode}
     print(f"Game played {game_played}")
 
-    max_score = {player: max([s['score'] for s in  data['sessions'] if s['player'] == player]) for player in player_list}
-    print(f"Max max score {max_score}")
+    max_score = {
+        player:
+        max([session['score'] for session in data['sessions']
+            if session['player'] == player])
+        for player in player_list
+    }
+    print(f"Max score {max_score}")
+
+    average_score_player = {  # dict
+        player:  # key player
+        (lambda x: sum(x) // len(x))  # value = average of
+        ([session['score'] for session in data['sessions']  # score of all game
+            if session['player'] == player])  # of a player
+        for player in player_list  # for all player
+    }
+    print(f"Average score by player : {average_score_player}")
+
+    print("\n === Set ===")
+    achievements_set = {achievement for achievement in data['achievements']}
+    print(f"Achievements set : {achievements_set}")
+
+    player_set = {player for player in data['players'].keys()}
+    print(f"Player set : {player_set}")
+
+    game_mode_set = {mode for mode in data['game_modes']}
+    print(f"Game mode set : {game_mode_set}")
+
+    print("\n=== Combined Analysis ===")
+    print(f"Total player : {len(player_set)}")
+
+    print(f"Average game time : {sum(game_time) / len(game_time)} min")
+
+    best_player, best_average = max(
+        [(player, score) for player, score in average_score_player.items()],
+        key=lambda x: x[1])
+    print(f"Best average : {best_player}, (score = {best_average})")
+
 
 if __name__ == "__main__":
     analytics_dashboard()
