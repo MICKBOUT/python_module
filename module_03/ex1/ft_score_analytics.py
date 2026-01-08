@@ -1,5 +1,7 @@
 import sys
 
+print("=== Player Score Analytics ===")
+
 if len(sys.argv) == 1:
     print("No scores provided. \
 Usage: python3 ft_score_analytics.py <score1> <score2> ...")
