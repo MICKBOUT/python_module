@@ -1,5 +1,0 @@
-=== CYBER ARCHIVES - COMMUNICATION SYSTEM ===
-
-Input Stream active. Enter archivist ID: Input Stream active. Enter status report: 
-[STANDARD] Archive status from  : 
-[STANDARD] Data transmission complete

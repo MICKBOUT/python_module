@@ -81,7 +81,7 @@ class Vegetable(Plant):
 
     def get_info(self):
         """
-        print various info whit this vegatable
+        print various info with this vegatable
         """
         print(f"{self.name} (Vegetable): {self.height}cm, \
 {self.age_days} days, {self.harvest_season} harvest")
