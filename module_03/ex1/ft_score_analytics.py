@@ -28,5 +28,6 @@ def player_score_analytics_tester() -> None:
             print(f"Low score: {min(scores)}")
             print(f"Score range: {max(scores) - min(scores)}\n")
 
+
 if __name__ == "__main__":
     player_score_analytics_tester()
