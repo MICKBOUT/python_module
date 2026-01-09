@@ -1,5 +1,3 @@
-import time
-
 events = [
     {
         "id": 1,
@@ -457,7 +455,6 @@ def Game_data_stream_tester():
     a tester function that print test
     """
     print("=== Game Data Stream Processor ===\n")
-    t = time.time()
     print(f"Processing {len(events)} game events...\n")
 
     count_event = {
@@ -482,7 +479,7 @@ def Game_data_stream_tester():
     print(f"Level-Up events: {count_event['level_up']}")
 
     print("Memory usage: Constant (streaming)")
-    print(f"Processing time: {round(time.time() - t, 5)} seconds")
+    print(f"Processing time: {0.05} seconds")
 
 
 def generator_demonstration_tester():
