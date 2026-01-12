@@ -63,7 +63,7 @@ common: {first_achievement.intersection(second_achievement)}")
 {second_achievement.difference(first_achievement)}")
 
 
-def achievement_tracker_tester():
+def achievement_tracker_tester() -> None:
     """
     A script that the the exercie w/ basic test and print it
     """

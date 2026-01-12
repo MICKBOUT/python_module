@@ -10,7 +10,7 @@ def command_quest_tester() -> None:
     if len(sys.argv) == 1:
         print("No arguments provided!")
 
-    print(f"Program name: {sys.argv}")
+    print(f"Program name: {sys.argv[0]}")
 
     if len(sys.argv) > 1:
         print(f"Arguments recived: {len(sys.argv) - 1}")

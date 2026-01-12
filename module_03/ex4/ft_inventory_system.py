@@ -120,7 +120,7 @@ def rare_items(player_dict: dict) -> str:
     return f"{rare_items}"[1:-1]
 
 
-def Player_inventory_tester():
+def Player_inventory_tester() -> None:
     """
     a tester that print test for this subject
     """

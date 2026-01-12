@@ -15,7 +15,7 @@ def index(data: str, ell: str) -> int:
     raise Exception(f"{ell} not found in {data}")
 
 
-def distance(end_pos, starting_pos: tuple = (0, 0, 0)):
+def distance(end_pos, starting_pos: tuple = (0, 0, 0)) -> None:
     """
     calculate the distance between two poitns
     """
@@ -61,7 +61,7 @@ def manage_string(string: str) -> None:
         distance(pos)
 
 
-def tester_coordinate_system():
+def tester_coordinate_system() -> None:
     """
     a tester fonction that show example of how the code work
     """

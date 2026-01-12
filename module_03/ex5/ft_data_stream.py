@@ -441,7 +441,7 @@ def event_stream():
         yield e
 
 
-def list_getter():
+def list_getter() -> list:
     """
     this function is an exemple of what to avoid
     return all the list can overflow the ram and slow the computre
@@ -450,7 +450,7 @@ def list_getter():
     return list(events)
 
 
-def Game_data_stream_tester():
+def Game_data_stream_tester() -> None:
     """
     a tester function that print test
     """
@@ -482,7 +482,7 @@ def Game_data_stream_tester():
     print(f"Processing time: {0.05} seconds")
 
 
-def generator_demonstration_tester():
+def generator_demonstration_tester() -> None:
     """
     print test relative to the subject
     """
