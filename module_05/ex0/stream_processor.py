@@ -86,7 +86,7 @@ class TextProcessor(DataProcessor):
         return f"/\\/\\{result}/\\/\\"
 
 
-class LogProcessor:
+class LogProcessor(DataProcessor):
     """
     • LogProcessor Classes: NumericProcessor Base on DataProcessor
     with method insted of abstractmethod
