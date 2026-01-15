@@ -1,6 +1,5 @@
-from abc import ABC, abstractmethod
+from abc import ABC
 from typing import Any, Protocol, List
-from time import time
 
 
 class ProcessingStage(Protocol):
@@ -18,13 +17,17 @@ class ProcessingPipeline(ABC):
     def __init__(self) -> None:
         self.stages: List[ProcessingStage] = []
         self.processed_count = 0
-        self.total_time = 0.0
 
     def add_stage(self, stage: ProcessingStage) -> None:
+        """
+        Add a stage in the pipeline
+        """
         self.stages.append(stage)
 
     def process(self, data: Any) -> Any:
-        start = time.time()
+        """
+        Execute the current process
+        """
         try:
             for stage in self.stages:
                 data = stage.process(data)
@@ -33,62 +36,53 @@ class ProcessingPipeline(ABC):
         except Exception as e:
             print("Pipeline error:", e)
             raise
-        finally:
-            self.total_time += time.time() - start
 
 
-
-# init w/ pipline id ?
 class JSONAdapter(ProcessingPipeline):
     def __init__(self, pipeline_id: int) -> None:
+        super().__init__()
         self.pipeline_id = pipeline_id
 
-    def process(self, data: Any) -> None:
+    def process(self, data: Any) -> Any:
         """
-        Process the data in arg
+        Header Json
         """
-        data
-        ...
+        print(f"[JSONAdapter {self.pipeline_id}] Processing JSON data")
+        return super().process(data)
 
 
 class CSVAdapter(ProcessingPipeline):
     def __init__(self, pipeline_id: int) -> None:
+        super().__init__()
         self.pipeline_id = pipeline_id
 
-    def process(self, data: Any) -> None:
+    def process(self, data: Any) -> Any:
         """
-        Process the data in arg
+        Header CVS
         """
-        data
-        ...
+        print(f"[CSVAdapter {self.pipeline_id}] Processing CSV data")
+        return super().process(data)
 
 
 class StreamAdapter(ProcessingPipeline):
     def __init__(self, pipeline_id: int) -> None:
+        super().__init__()
         self.pipeline_id = pipeline_id
 
-    def process(self, data: Any) -> None:
+    def process(self, data: Any) -> Any:
         """
-        Process the data in arg
+        Header StreamAdapter
         """
-        data
-        ...
+        print(f"[StreamAdapter {self.pipeline_id}] Processing Stream data")
+        return super().process(data)
 
 
-
-
-class InputStage(ProcessingStage):
-    def process(self, data: tuple[int, str]) -> dict:
+class InputStage:
+    def process(self, data: tuple[tuple[int, str], ...]) -> dict:
         """
-        Convert the data to a dict
+        Transform the data into a dict
         """
-        intput_dict = {}
-        try:
-            for key, value in data:
-                intput_dict[key] = value
-        except Exception as e:
-            raise e
-        return intput_dict
+        return {key: value for key, value in data}
 
 
 class TransformStage:
@@ -96,24 +90,32 @@ class TransformStage:
         """
         Capitalize the value of the dict
         """
-        transform_dict = {}
-        try:
-            for key, value in data.items():
-                transform_dict[key] = value.capitalize()
-        except Exception as e:
-            raise e
-        return transform_dict
+        return {k: v.capitalize() for k, v in data.items()}
 
 
 class OutputStage:
-    def process(self, data) -> str:
+    def process(self, data: dict) -> str:
+        """
+        Transthe imput into a readable one
+        """
         output_str = ""
-        try:
-            for key, value in data.items():
-                output_str += f"Number: {key}, word: {value}\n"
-        except Exception as e:
-            raise e
+        for key, value in data.items():
+            output_str += f"Number: {key}, word: {value}\n"
         return output_str
+
+
+class StringToRecordsStage:
+    def process(self, data: str) -> tuple[tuple[int, str], ...]:
+        """
+        Transform the string from the previous pipeline to be usable
+        """
+        records = []
+        for line in data.strip().splitlines():
+            left, right = line.split(",")
+            num = int(left.replace("Number:", "").strip())
+            word = right.replace("word:", "").strip().lower()
+            records.append((num, word))
+        return tuple(records)
 
 
 class NexusManager:
@@ -121,47 +123,60 @@ class NexusManager:
     class NexusManager that orchestrates multiple pipelines polymorphically
     """
     def __init__(self):
-        self.stages = []
+        self.pipelines: List[ProcessingPipeline] = []
 
-    def process_data(self, data) -> bool:
+    def process_data(self, data: Any) -> Any:
         """
         Execute data throug a pipline
         """
         try:
-            for pipeline in self.stages:
-                buffer = data
-                buffer = pipeline.process(data)
-                data = buffer
+            for pipeline in self.pipelines:
+                data = pipeline.process(data)
         except Exception as e:
             print("Error in pipline:", e)
         else:
             print("Pipeline completed")
-        print("data at exit :")
-        print(data)
-        return True
+        return data
 
-    def add_pipline(self, pipeline) -> None:
+    def add_pipeline(self, pipeline: Any) -> None:
         """
         Add a pipeline
         """
-        self.stages.append(pipeline)
+        self.pipelines.append(pipeline)
 
 
-manager = NexusManager()
+if __name__ == "__main__":
+    data = (
+        (0, "zero"),
+        (1, "one"),
+        (2, "two"),
+        (3, "three"),
+    )
 
-input_stage = InputStage()
-transform_stage = TransformStage()
-output_stage = OutputStage()
+    json_pipeline = JSONAdapter(1)
+    json_pipeline.add_stage(InputStage())
+    json_pipeline.add_stage(TransformStage())
+    json_pipeline.add_stage(OutputStage())
 
-manager.add_pipline(input_stage)
-manager.add_pipline(transform_stage)
-manager.add_pipline(output_stage)
+    csv_pipeline = CSVAdapter(2)
+    csv_pipeline.add_stage(StringToRecordsStage())
+    csv_pipeline.add_stage(InputStage())
+    csv_pipeline.add_stage(TransformStage())
+    csv_pipeline.add_stage(OutputStage())
 
-data = (
-    (0, "zero"),
-    (1, "one"),
-    (3, "three"),
-    (4, "four"),
-)
+    Stream_pipeline = StreamAdapter(3)
+    Stream_pipeline.add_stage(StringToRecordsStage())
+    Stream_pipeline.add_stage(InputStage())
+    Stream_pipeline.add_stage(TransformStage())
+    Stream_pipeline.add_stage(OutputStage())
 
-manager.process_data(data)
+    manager = NexusManager()
+    manager.add_pipeline(json_pipeline)
+    manager.add_pipeline(csv_pipeline)
+    manager.add_pipeline(Stream_pipeline)
+
+    result = manager.process_data(data)
+    print()
+
+    print("=== FINAL RESULT ===")
+    print(result)
