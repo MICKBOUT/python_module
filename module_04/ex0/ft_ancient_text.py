@@ -11,7 +11,7 @@ def cyber_archives_tester() -> None:
         print("Connection established...")
         content = file.read()
         file.close()
-    except Exception as e:
+    except Exception:
         print("ERROR: Storage vault not found.")
     else:
         print("\nRECOVERED DATA:")
