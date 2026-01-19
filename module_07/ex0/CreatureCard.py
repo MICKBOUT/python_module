@@ -5,12 +5,12 @@ class CreatureCard(Card):  # Concrete Implementation
     def __init__(
             self, name: str, cost: int, rarity: str, attack: int, health: int):
         super().__init__(name, cost, rarity)
-        self.info["type"] = "Creature"
+        self.info["type"] = "Elite"
         if attack <= 0:
-            raise Exception("attack can't be negative")
+            raise Exception("attack can't be initialize as a negative value")
         self.info["attack"] = attack
         if health <= 0:
-            raise Exception("health can't be negative")
+            raise Exception("health can't be initialize as a negative value")
         self.info["health"] = health
 
     def play(self, game_state: dict[str]) -> dict:
