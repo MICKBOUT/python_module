@@ -15,6 +15,5 @@ class SpellCard(Card):
         }
         return play_result
 
-
     def resolve_effect(self, targets: list) -> dict:
-        ...
+        targets.info["effect"] = None

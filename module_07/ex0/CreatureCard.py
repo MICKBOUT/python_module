@@ -5,7 +5,7 @@ class CreatureCard(Card):  # Concrete Implementation
     def __init__(
             self, name: str, cost: int, rarity: str, attack: int, health: int):
         super().__init__(name, cost, rarity)
-        self.info["type"] = "Elite"
+        self.info["type"] = "Creature"
         if attack <= 0:
             raise Exception("attack can't be initialize as a negative value")
         self.info["attack"] = attack
