@@ -1,9 +1,11 @@
-from ex0.Card import Card
+from ex0.Card import Card, Rarity
+from typing import Dict
 
 
 class CreatureCard(Card):  # Concrete Implementation
     def __init__(
-            self, name: str, cost: int, rarity: str, attack: int, health: int):
+            self, name: str, cost: int, rarity: Rarity | str,
+            attack: int, health: int):
         super().__init__(name, cost, rarity)
         self.info["type"] = "Creature"
         if attack <= 0:
@@ -21,7 +23,7 @@ class CreatureCard(Card):  # Concrete Implementation
         }
         return play_result
 
-    def attack_target(self, target) -> dict:
+    def attack_target(self, target) -> Dict:
         target.info["health"] -= self.info["attack"]
         attack_result = {
             "attacker": self.info["name"],

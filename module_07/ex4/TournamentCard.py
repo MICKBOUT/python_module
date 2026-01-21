@@ -13,7 +13,12 @@ class TournamentCard (Card, Combatable, Rankable):
         self.losse = 0
 
     def play(self, game_state: dict) -> dict:
-        ...
+        play_result = {
+            "enemy": game_state["enemy"]
+            if "enemy" in game_state else "no mention",
+            "play_status": 'card ready to play in tournament',
+        }
+        return play_result
 
     def attack(self, target) -> dict:
         atk = {
@@ -23,7 +28,11 @@ class TournamentCard (Card, Combatable, Rankable):
         return atk
 
     def get_tournament_stats(self) -> dict:
-        ...
+        tournament_stats = {
+            "tournament win": self.win,
+            "tournament losse": self.losse,
+        }
+        return tournament_stats
 
     def defend(self, incoming_damage: int) -> dict:
         return {"dmg_taken": incoming_damage * random()}

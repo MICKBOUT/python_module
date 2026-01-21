@@ -1,4 +1,4 @@
-from ex0.Card import Card
+from ex0.Card import Card, Rarity
 from ex2.Combatable import Combatable
 from ex2.Magical import Magical
 from typing import List
@@ -6,8 +6,8 @@ from typing import List
 
 class EliteCard(Card, Combatable, Magical):
     def __init__(
-        self, name: str, cost: int, rarity: str, attack: int, health: int,
-        combat_type: str = "melee"
+        self, name: str, cost: int, rarity: str | Rarity, attack: int,
+        health: int, combat_type: str = "melee"
     ):
         super().__init__(name, cost, rarity)
         self.info["type"] = "Elite"

@@ -6,11 +6,12 @@ def main() -> None:
 
     print("Building deck with different card types...")
     deck = ex1.Deck()
-    deck.add_card(ex1.CreatureCard("Fire Dragon", 5, 'Legendary', 7, 5))
+    deck.add_card(ex1.CreatureCard("Fire Dragon", 5, ex1.Rarity.LEGENDARY,
+                  7, 5))
     deck.add_card(ex1.ArtifactCard(
-        "Mana Crystal", 2, 'Epic', 10, 'Permanent: +1 mana per turn'))
+        "Mana Crystal", 2, ex1.Rarity.EPIC, 10, 'Permanent: +1 mana per turn'))
     deck.add_card(ex1.SpellCard(
-        "Lightning Bolt", 3, "Rare", 'Deal 3 damage to target'))
+        "Lightning Bolt", 3, ex1.Rarity.RARE, 'Deal 3 damage to target'))
     print("Deck stats:", deck.get_deck_stats())
     print()
 

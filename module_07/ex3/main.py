@@ -15,7 +15,7 @@ def main() -> None:
     print("Simulating aggressive turn...")
     engine = ex3.GameEngine()
     engine.configure_engine(fantasy_factory, strategy)
-    enemy = ex3.CreatureCard("Enemy Player", 3, 'Legendary', 5, 5)
+    enemy = ex3.CreatureCard("Enemy Player", 3, ex3.Rarity.LEGENDARY, 5, 5)
     engine.battlefield.append(enemy)
 
     Actions = engine.simulate_turn()

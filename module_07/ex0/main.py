@@ -5,9 +5,11 @@ def main() -> None:
     print("\n=== DataDeck Card Foundation ===\n")
     print("Testing Abstract Base Class Design:\n")
 
-    card_deck = ex0.CreatureCard("Fire Dragon", 5, 'Legendary', 7, 5)
+    card_deck = ex0.CreatureCard("Fire Dragon", 5, ex0.Rarity.LEGENDARY, 7, 5)
     print("CreatureCard Info:")
     print(card_deck.get_card_info())
+    print(ex0.CreatureCard("Fire Dragon", 5, "Legendary", 7, 5).get_card_info()
+          )
     print()
 
     mana = 6
