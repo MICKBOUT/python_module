@@ -1,0 +1,92 @@
+from importlib.metadata import version, PackageNotFoundError
+
+
+deps = {}
+with open("requirements.txt") as f:
+    for line in f:
+        line = line.strip()
+        if not line or line.startswith("#"):
+            continue
+        if "==" in line:
+            package, ver = line.split("==", 1)
+            deps[package] = ver
+        else:
+            deps[line] = None
+
+
+missing = []
+bad_version = []
+
+for module, required in deps.items():
+    try:
+        installed = version(module)
+        if required and not installed.startswith(required):
+            bad_version.append((module, installed, required))
+    except PackageNotFoundError:
+        missing.append(module)
+
+if missing or bad_version:
+    if missing:
+        print("Missing modules:", missing)
+    if bad_version:
+        print("Wrong versions:")
+        for m, inst, req in bad_version:
+            print(f" - {m}: installed {inst}, required {req}")
+    print()
+    print("To run the programe:")
+    print("python3 -m venv 'venv_name'")
+    print("run source ./'venv_name'/bin/activate")
+    print()
+
+    print("If you want use poetry:")
+    print("pip install poetry")
+    print("poetry install")
+    print()
+
+    print("If you want use pip:")
+    print("pip install -r requirements.txt")
+    print("")
+
+else:
+    import requests
+    import time
+    import pandas
+    import numpy
+    import matplotlib.pyplot
+
+    end = int(time.time())
+    start = end - 2592000
+    url = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart/range"
+    params = {
+        "vs_currency": "usd",
+        "from": start,
+        "to": end
+    }
+
+    response = requests.get(url, params=params)
+    data = response.json()
+
+    df = pandas.DataFrame(data["prices"], columns=["timestamp", "price"])
+
+    df["timestamp"] = pandas.to_datetime(df["timestamp"], unit="ms")
+    df = df.set_index("timestamp")
+
+    prices_np = df["price"].to_numpy()
+
+    print("Mean price:", numpy.mean(prices_np))
+    print("Price volatility (std):", numpy.std(prices_np))
+
+    df["smooth"] = df["price"].rolling(window=20, center=True).mean()
+
+    matplotlib.pyplot.figure(figsize=(16, 9))
+
+    matplotlib.pyplot.plot(df.index, df["price"], label="Raw Price")
+    matplotlib.pyplot.plot(df.index, df["smooth"], label="Smoothed Price")
+
+    matplotlib.pyplot.title("Bitcoin Price Over the Last 30 Days")
+    matplotlib.pyplot.xlabel("Date")
+    matplotlib.pyplot.ylabel("Price (USD)")
+    matplotlib.pyplot.grid(True)
+    matplotlib.pyplot.legend()
+
+    matplotlib.pyplot.show()
