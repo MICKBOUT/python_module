@@ -1,53 +1,7 @@
 from importlib.metadata import version, PackageNotFoundError
 
 
-deps = {}
-with open("requirements.txt") as f:
-    for line in f:
-        line = line.strip()
-        if not line or line.startswith("#"):
-            continue
-        if "==" in line:
-            package, ver = line.split("==", 1)
-            deps[package] = ver
-        else:
-            deps[line] = None
-
-
-missing = []
-bad_version = []
-
-for module, required in deps.items():
-    try:
-        installed = version(module)
-        if required and not installed.startswith(required):
-            bad_version.append((module, installed, required))
-    except PackageNotFoundError:
-        missing.append(module)
-
-if missing or bad_version:
-    if missing:
-        print("Missing modules:", missing)
-    if bad_version:
-        print("Wrong versions:")
-        for m, inst, req in bad_version:
-            print(f" - {m}: installed {inst}, required {req}")
-    print()
-    print("To run the programe:")
-    print("python3 -m venv 'venv_name'")
-    print("run source ./'venv_name'/bin/activate")
-    print()
-
-    print("If you want use poetry:")
-    print("pip install poetry")
-    print("poetry install")
-    print()
-
-    print("If you want use pip:")
-    print("pip install -r requirements.txt")
-    print("")
-
-else:
+def bitcoin_graph() -> None:
     import requests
     import time
     import pandas
@@ -90,3 +44,59 @@ else:
     matplotlib.pyplot.legend()
 
     matplotlib.pyplot.show()
+
+
+def error_deps(missing: list, bad_version: list) -> None:
+    if missing:
+        print("Missing modules:", missing)
+    if bad_version:
+        print("Wrong versions:")
+        for m, inst, req in bad_version:
+            print(f" - {m}: installed {inst}, required {req}")
+    print()
+    print("To run the programe:")
+    print("python3 -m venv 'venv_name'")
+    print("run source ./'venv_name'/bin/activate")
+    print()
+
+    print("If you want use poetry:")
+    print("pip install poetry")
+    print("poetry install")
+    print()
+
+    print("If you want use pip:")
+    print("pip install -r requirements.txt")
+    print("")
+
+
+def find_deps(file: str = "requirements.txt") -> dict:
+    deps = {}
+    with open(file) as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            if "==" in line:
+                package, ver = line.split("==", 1)
+                deps[package] = ver
+            else:
+                deps[line] = None
+    return deps
+
+
+if __name__ == "__main__":
+    deps = find_deps()
+    missing = []
+    bad_version = []
+    for module, required in deps.items():
+        try:
+            installed = version(module)
+            if required and not installed.startswith(required):
+                bad_version.append((module, installed, required))
+        except PackageNotFoundError:
+            missing.append(module)
+
+    if missing or bad_version:
+        error_deps(missing, bad_version)
+    else:
+        bitcoin_graph()
