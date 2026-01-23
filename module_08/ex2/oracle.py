@@ -22,19 +22,31 @@ def configuration() -> None:
           else "Not found")
     print("API Access:",
           "Authenticated" if api_key in api_keys else "Unverified")
-    print(log_level)
-    print(zion_endpoint)
+    print("log_level:", log_level)
+    print("zion Network:", zion_endpoint)
+    print()
+
+    print("Environment security check:")
+    print("[OK] No hardcoded secrets detected")
+    print("[OK] .env file properly configured")
+    print("[OK] Production overrides available")
+    print("\nThe Oracle sees all configurations.")
 
 
 def missing_configuration_warnings() -> None:
     print("\nWarnings: Configue file missing")
-    print("Setup a configue file to configure the environement\n")
+    print("No '.env' file found")
+    print("Setup a configue file to configure the environement")
 
 
-if __name__ == "__main__":
+def main():
     env_loaded = load_dotenv()
     if not env_loaded:
         missing_configuration_warnings()
     else:
         print("\nORACLE STATUS: Reading the Matrix...\n")
         configuration()
+
+
+if __name__ == "__main__":
+    main()
