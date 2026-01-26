@@ -22,6 +22,9 @@ def main() -> None:
         print(getsitepackages()[0])
 
     else:
+        print("WARNING: You're in the global environment!")
+        print("The machines can see everything you install.\n")
+
         print("To enter the construct, run:")
         print("python3 -m venv matrix_env")
         print("source matrix_env/bin/activate", "# On Unix")

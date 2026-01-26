@@ -8,6 +8,7 @@ def bitcoin_graph() -> None:
     import numpy
     import matplotlib.pyplot
 
+    # get the timestemp
     end = int(time.time())
     start = end - 2592000
     url = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart/range"
@@ -17,25 +18,34 @@ def bitcoin_graph() -> None:
         "to": end
     }
 
+    # call to api
     response = requests.get(url, params=params)
     data = response.json()
 
-    df = pandas.DataFrame(data["prices"], columns=["timestamp", "price"])
+    # datra frame
+    data_frame = pandas.DataFrame(data["prices"],
+                                  columns=["timestamp", "price"])
 
-    df["timestamp"] = pandas.to_datetime(df["timestamp"], unit="ms")
-    df = df.set_index("timestamp")
+    data_frame["timestamp"] = pandas.to_datetime(data_frame["timestamp"],
+                                                 unit="ms")
 
-    prices_np = df["price"].to_numpy()
+    data_frame = data_frame.set_index("timestamp")
+
+    prices_np = data_frame["price"].to_numpy()
 
     print("Mean price:", numpy.mean(prices_np))
     print("Price volatility (std):", numpy.std(prices_np))
 
-    df["smooth"] = df["price"].rolling(window=20, center=True).mean()
+    data_frame["smooth"] = data_frame["price"].rolling(window=20,
+                                                       center=True).mean()
 
+    # create the graph
     matplotlib.pyplot.figure(figsize=(16, 9))
 
-    matplotlib.pyplot.plot(df.index, df["price"], label="Raw Price")
-    matplotlib.pyplot.plot(df.index, df["smooth"], label="Smoothed Price")
+    matplotlib.pyplot.plot(data_frame.index, data_frame["price"],
+                           label="Raw Price")
+    matplotlib.pyplot.plot(data_frame.index, data_frame["smooth"],
+                           label="Smoothed Price")
 
     matplotlib.pyplot.title("Bitcoin Price Over the Last 30 Days")
     matplotlib.pyplot.xlabel("Date")
@@ -48,7 +58,10 @@ def bitcoin_graph() -> None:
 
 def error_deps(missing: list, bad_version: list) -> None:
     if missing:
-        print("Missing modules:", missing)
+        print("Missing modules:")
+        for module in missing:
+            print(f" - {module}")
+        print("")
     if bad_version:
         print("Wrong versions:")
         for m, inst, req in bad_version:
@@ -70,6 +83,7 @@ def error_deps(missing: list, bad_version: list) -> None:
 
 
 def find_deps(file: str = "requirements.txt") -> dict:
+    # find the depos w/ a with open cond
     deps = {}
     with open(file) as f:
         for line in f:
@@ -84,19 +98,30 @@ def find_deps(file: str = "requirements.txt") -> dict:
     return deps
 
 
-if __name__ == "__main__":
+def main():
     deps = find_deps()
     missing = []
     bad_version = []
+
+    # check module
+    print("cheking module")
     for module, required in deps.items():
         try:
             installed = version(module)
             if required and not installed.startswith(required):
                 bad_version.append((module, installed, required))
+            else:
+                print(f"[OK] {module} - ({required})")
         except PackageNotFoundError:
             missing.append(module)
+    print()
 
+    # manage missing module
     if missing or bad_version:
         error_deps(missing, bad_version)
     else:
         bitcoin_graph()
+
+
+if __name__ == "__main__":
+    main()
