@@ -129,29 +129,6 @@ class SpaceMission(BaseModel):
 def main() -> None:
     print("Space Mission Crew Validation")
     print("=========================================")
-    Sarah_Connor = CrewMember(
-        member_id="Saconnor",
-        name="Sarah Connor",
-        rank=CrewRanks.COMMANDER,
-        age=55,
-        specialization="Mission Command",
-        years_experience="20")
-
-    John_Smith = CrewMember(
-        member_id="Jsmith",
-        name="John Smith",
-        rank=CrewRanks.LIEUTENANT,
-        age=25,
-        specialization=" Navigation",
-        years_experience="6")
-
-    Alice_Johnson = CrewMember(
-        member_id="Aljohnso",
-        name="Alice Johnson",
-        rank=CrewRanks.OFFICER,
-        age=40,
-        specialization="Engineering",
-        years_experience="2")
 
     try:
         mission = SpaceMission(
@@ -160,16 +137,29 @@ def main() -> None:
             destination="Mars",
             launch_date=datetime(2000, 1, 1),
             duration_days=900,
-            crew=[CrewMember(
+            crew=[
+                CrewMember(
                     member_id="Saconnor",
                     name="Sarah Connor",
                     rank=CrewRanks.COMMANDER,
                     age=55,
                     specialization="Mission Command",
-                    years_experience="20"
-                ),
-                John_Smith,
-                Alice_Johnson],
+                    years_experience="20"),
+                CrewMember(
+                    member_id="Jsmith",
+                    name="John Smith",
+                    rank=CrewRanks.LIEUTENANT,
+                    age=25,
+                    specialization=" Navigation",
+                    years_experience="6"),
+                CrewMember(
+                    member_id="Aljohnso",
+                    name="Alice Johnson",
+                    rank=CrewRanks.OFFICER,
+                    age=40,
+                    specialization="Engineering",
+                    years_experience="2")
+                ],
             budget_millions=2500.0,
         )
         mission.print_attributes()
@@ -187,13 +177,29 @@ def main() -> None:
             destination="Mars",
             launch_date=datetime(2000, 1, 1),
             duration_days=900,
-            crew=[John_Smith, Alice_Johnson],
+            crew=[
+                CrewMember(
+                    member_id="Jsmith",
+                    name="John Smith",
+                    rank=CrewRanks.LIEUTENANT,
+                    age=25,
+                    specialization=" Navigation",
+                    years_experience="6"),
+                CrewMember(
+                    member_id="Aljohnso",
+                    name="Alice Johnson",
+                    rank=CrewRanks.OFFICER,
+                    age=40,
+                    specialization="Engineering",
+                    years_experience="2"),
+            ],
             budget_millions=2500.0,
         )
         mission.print_attributes()
     except ValidationError as e:
         for error in e.errors():
             print(error["msg"])
+
 
 if __name__ == "__main__":
     main()
