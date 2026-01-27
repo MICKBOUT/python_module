@@ -42,7 +42,10 @@ def conditional_caster(condition: callable, spell: callable) -> callable:
 
 
 def spell_sequence(spells: list[callable]) -> callable:
-    ...
+    def chaine(power: int) -> None:
+        for index, spell in enumerate(spells):
+            print(f"{index + 1} - {spell(power)}")
+    return chaine
 
 
 def main() -> None:
@@ -60,14 +63,29 @@ def main() -> None:
     print("Original:", thunder(), "Amplified:", mega_thunder())
     print()
 
-
     print("Testing conditional caster:")
     conditional_spell = conditional_caster(mod_2_condition, powerfull_spell)
-    
-    for i in (5, 6):
-        print("cast ")
+    print("Cast invalide:", conditional_spell(5))
+    print("Cast valide:", conditional_spell(6))
     print()
 
+    print("Spell chaine")
+    first_spell = conditional_caster(
+        lambda power: power % 2 == 0,
+        lambda power: f"{power * 2} dmg done"
+    )
+    second_spell = conditional_caster(
+        lambda power: power % 3 == 0,
+        lambda power: f"{power * 3} dmg done"
+    )
+    third_spell = conditional_caster(
+        lambda power: power % 4 == 0,
+        lambda power: f"{power * 4} dmg done"
+    )
+    print("Testing spell chaine:")
+    spell_chaine = spell_sequence([first_spell, second_spell, third_spell])
+    print("Cast spell chaine:")
+    spell_chaine(6)
 
 
 if __name__ == "__main__":
