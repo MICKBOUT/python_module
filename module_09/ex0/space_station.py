@@ -1,9 +1,11 @@
-from pydantic import BaseModel, field_validator, ValidationError
+from pydantic import BaseModel, ValidationError, Field
 from datetime import datetime
 from typing import Optional
 
 
-class SpaceStation(BaseModel):
+"""
+from pydantic import field_validator
+
     station_id: str
     name: str
     crew_size: int
@@ -49,6 +51,18 @@ class SpaceStation(BaseModel):
         if not (v is None) and len(v) > 200:
             raise ValueError("notes must have 200 characters or less")
         return v
+"""
+
+
+class SpaceStation(BaseModel):
+    station_id: str = Field(min_length=3, max_length=10)
+    name: str = Field(min_length=1, max_length=50)
+    crew_size: int = Field(ge=1, le=20)
+    power_level: float = Field(ge=0.0, le=100.0)
+    oxygen_level: float = Field(ge=0.0, le=100.0)
+    last_maintenance: datetime
+    is_operational: bool = True
+    notes: Optional[str] = Field(default=None, max_length=200)
 
 
 def main():
@@ -56,7 +70,7 @@ def main():
     print("========================================")
 
     station = SpaceStation(
-        station_id="ISS001",
+        station_id="ISS00",
         name="International Space Station",
         crew_size=6,
         power_level=85.5,

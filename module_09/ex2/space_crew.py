@@ -1,8 +1,7 @@
 from enum import Enum
 from typing import Optional
 from datetime import datetime
-from pydantic import \
-    BaseModel, field_validator, ValidationError, model_validator
+from pydantic import BaseModel, ValidationError, model_validator, Field
 
 
 class CrewRanks(Enum):
@@ -14,84 +13,24 @@ class CrewRanks(Enum):
 
 
 class CrewMember(BaseModel):
-    member_id: str
-    name: str
+    member_id: str = Field(min_length=3, max_length=10)
+    name: str = Field(min_length=2, max_length=50)
     rank: CrewRanks
-    age: int
-    specialization: str
-    years_experience: int
+    age: int = Field(ge=18, le=80)
+    specialization: str = Field(min_length=3, max_length=30)
+    years_experience: int = Field(ge=0, le=50)
     is_active: Optional[bool] = True
-
-    @field_validator("member_id")
-    def check_mission_id(cls, v: str):
-        if not 3 <= len(v) <= 10:
-            raise ValueError("member_id must have b/w 3 and 10 char")
-        return v
-
-    @field_validator("name")
-    def check_name(cls, v: str):
-        if not 2 <= len(v) <= 50:
-            raise ValueError("name must have b/w 2 and 50 char")
-        return v
-
-    @field_validator("age")
-    def check_age(cls, v: int):
-        if not 18 <= v <= 80:
-            raise ValueError("name must be b/w 18 and 80")
-        return v
-
-    @field_validator("specialization")
-    def check_specialization(cls, v: str):
-        if not 3 <= len(v) <= 30:
-            raise ValueError("specialization must have b/w 3 and 30 char")
-        return v
-
-    @field_validator("years_experience")
-    def check_years_experience(cls, v: int):
-        if not 0 <= v <= 50:
-            raise ValueError("years_experience must be b/w 0 and 50")
-        return v
 
 
 class SpaceMission(BaseModel):
-    mission_id: str
-    mission_name: str
-    destination: str
+    mission_id: str = Field(min_length=5, max_length=50)
+    mission_name: str = Field(min_length=3, max_length=100)
+    destination: str = Field(min_length=3, max_length=50)
     launch_date: datetime
-    duration_days: int
-    crew: list[CrewMember]
+    duration_days: int = Field(ge=1, le=3650)
+    crew: list[CrewMember] = Field(min_length=1, max_length=12)
     mission_status: Optional[str] = "planned"
-    budget_millions: float
-
-    @field_validator("mission_id")
-    def check_mission_id(cls, v: str):
-        if not 5 <= len(v) <= 50:
-            raise ValueError("mission_id must have b/w 5 and 50 char")
-        return v
-
-    @field_validator("mission_name")
-    def check_mission_name(cls, v: str):
-        if not 3 <= len(v) <= 100:
-            raise ValueError("mission_name must have b/w 3 and 100 char")
-        return v
-
-    @field_validator("destination")
-    def check_destination(cls, v: str):
-        if not 3 <= len(v) <= 50:
-            raise ValueError("destination must have b/w 3 and 50 char")
-        return v
-
-    @field_validator("duration_days")
-    def check_duration_days(cls, v: int):
-        if not 1 <= v <= 3650:
-            raise ValueError("duration_days must have b/w 1 and 3650 days")
-        return v
-
-    @field_validator("budget_millions")
-    def check_budget_millions(cls, v: float):
-        if not 1.0 <= v <= 10000.0:
-            raise ValueError("budget_millions must be b/w 1.0 and 10000.0")
-        return v
+    budget_millions: float = Field(ge=1.0, le=10000.0)
 
     @model_validator(mode="after")
     def check_overall_validation(self):

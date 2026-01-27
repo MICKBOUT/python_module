@@ -1,5 +1,4 @@
-from pydantic import \
-    BaseModel, field_validator, ValidationError, model_validator
+from pydantic import BaseModel, ValidationError, model_validator, Field
 from datetime import datetime
 from typing import Optional
 from enum import Enum
@@ -181,57 +180,15 @@ class contact(Enum):
 
 
 class AlienContact(BaseModel):
-    contact_id: str
+    contact_id: str = Field(min_length=5, max_length=15)
     timestamp: datetime
-    location: str
+    location: str = Field(min_length=3, max_length=100)
     contact_type: contact
-    signal_strength: float
-    duration_minutes: int
-    witness_count: int
-    message_received: Optional[str] = None
+    signal_strength: float = Field(ge=0.0, le=10.0)
+    duration_minutes: int = Field(ge=1, le=1440)
+    witness_count: int = Field(ge=1, le=100)
+    message_received: Optional[str] = Field(default=None, max_length=100)
     is_verified: bool = False
-
-    @field_validator("contact_id")
-    def check_station_id(cls, v: str):
-        if not (5 <= len(v) <= 15):
-            raise ValueError(
-                "contact_id must have between 5 and 15 characters")
-        return v
-
-    @field_validator("location")
-    def check_location(cls, v: str):
-        if not (3 <= len(v) <= 100):
-            raise ValueError("location must have between 3 and 100 characters")
-        return v
-
-    @field_validator("signal_strength")
-    def check_signal_strength(cls, v: float):
-        if not (0.0 <= v <= 10.0):
-            raise ValueError(
-                "signal_strength must must be between 0.0 and 10.0")
-        return v
-
-    @field_validator("duration_minutes")
-    def check_duration_minutes(cls, v: int):
-        if not (1 <= v <= 1440):
-            raise ValueError(
-                "duration_minutes must must be between 1 and 1440")
-        return v
-
-    @field_validator("witness_count")
-    def check_witness_count(cls, v: int):
-        if not (1 <= v <= 100):
-            raise ValueError("witness_count must must be between 1 and 100")
-        return v
-
-    @field_validator("message_received")
-    def check_message_received(cls, v: str):
-        if v is None:
-            return v
-        if len(v) > 100:
-            raise ValueError(
-                "message_received must have 100 characters max")
-        return v
 
     @model_validator(mode="after")
     def check_overall_validation(self):
@@ -285,7 +242,7 @@ def main() -> None:
     try:
         alien = AlienContact(
             contact_id="AC_2024_001",
-            timestamp=datetime(2000, 1, 1),
+            timestamp=datetime(2000, 2, 2),
             location="Area 51, Nevada",
             contact_type=contact.RADIO,
             signal_strength=8.5,
