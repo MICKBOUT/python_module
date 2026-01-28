@@ -172,7 +172,7 @@ ALIEN_CONTACTS = [
 ]
 
 
-class contact(Enum):
+class ContactType(Enum):
     PHYSICAL = "physical"
     TELEPATHIC = "telepathic"
     RADIO = "radio"
@@ -183,7 +183,7 @@ class AlienContact(BaseModel):
     contact_id: str = Field(min_length=5, max_length=15)
     timestamp: datetime
     location: str = Field(min_length=3, max_length=100)
-    contact_type: contact
+    contact_type: ContactType
     signal_strength: float = Field(ge=0.0, le=10.0)
     duration_minutes: int = Field(ge=1, le=1440)
     witness_count: int = Field(ge=1, le=100)
@@ -194,9 +194,10 @@ class AlienContact(BaseModel):
     def check_overall_validation(self):
         if self.contact_id[:2] != "AC":
             raise ValueError("Contact ID must start with 'AC' (Alien Contact)")
-        if self.contact_type == contact.PHYSICAL and not self.is_verified:
+        if self.contact_type == ContactType.PHYSICAL and not self.is_verified:
             raise ValueError("Physical contact reports must be verified")
-        if self.contact_type == contact.TELEPATHIC and self.witness_count < 3:
+        if (self.contact_type == ContactType.TELEPATHIC
+           and self.witness_count < 3):
             raise ValueError(
                 "Telepathic contact requires at least 3 witnesses")
         if self.signal_strength > 7 and self.message_received is None:
@@ -244,7 +245,7 @@ def main() -> None:
             contact_id="AC_2024_001",
             timestamp=datetime(2000, 2, 2),
             location="Area 51, Nevada",
-            contact_type=contact.RADIO,
+            contact_type=ContactType.RADIO,
             signal_strength=8.5,
             duration_minutes=45,
             witness_count=5,
@@ -261,11 +262,11 @@ def main() -> None:
 
     print("Expected validation error:")
     try:
-        AlienContact(
+        alien = AlienContact(
             contact_id="AC_2024_001",
             timestamp=datetime(2000, 1, 1),
             location="Area 51, Nevada",
-            contact_type=contact.TELEPATHIC,
+            contact_type=ContactType.TELEPATHIC,
             signal_strength=8.5,
             duration_minutes=45,
             witness_count=2,

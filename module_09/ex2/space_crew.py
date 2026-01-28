@@ -23,7 +23,7 @@ class CrewMember(BaseModel):
 
 
 class SpaceMission(BaseModel):
-    mission_id: str = Field(min_length=5, max_length=50)
+    mission_id: str = Field(min_length=5, max_length=15)
     mission_name: str = Field(min_length=3, max_length=100)
     destination: str = Field(min_length=3, max_length=50)
     launch_date: datetime
