@@ -42,14 +42,24 @@ def memoized_fibonacci(n: int) -> int:
     return memoized_fibonacci(n - 1) + memoized_fibonacci(n - 2)
 
 
-@singledispatch
 def spell_dispatcher() -> callable:
-    ...
+    @singledispatch
+    def spell(value):
+        raise TypeError(f"No spell for type {type(value).__name__}")
 
+    @spell.register
+    def _(value: int) -> str:
+        return f"Damage spell cast, {value} dmg done"
 
-@spell_dispatcher.register
-def _(x: int):
-    ...
+    @spell.register
+    def _(value: str) -> str:
+        return f"Object Enchanted W/ {value}"
+
+    @spell.register
+    def _(value: list) -> str:
+        return f"Casting multiple spells: {len(value)} spells"
+
+    return spell
 
 
 def main() -> None:
@@ -64,11 +74,21 @@ def main() -> None:
     print(" -", (lv_50_enchant["fire_enchant"])("Sword"))
     print(" -", (lv_50_enchant["ice_enchant"])("Bow"))
     print(" -", (lv_50_enchant["lightning_enchant"])("pickaxe"))
+    print()
 
+    print("Test Lru cache")
+    nb = 37
     t = time()
-    for nb in fibonacci_tests:
-        memoized_fibonacci(nb)
-    print(time() - t)
+    print(f"Fibo({nb}: {memoized_fibonacci(nb)} "
+          f"calculated in {round(time() - t, 4)}s")
+    print()
+
+    print("Test spell dispatcher:")
+    dispatcher_function = spell_dispatcher()
+    print(dispatcher_function(10))
+    print(dispatcher_function("Mending"))
+    print(dispatcher_function(["Fire", "Powerfull Fire", "Very Powerfull Fire"
+                               ]))
 
 
 if __name__ == "__main__":
