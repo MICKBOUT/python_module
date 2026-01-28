@@ -31,7 +31,7 @@ from pydantic import field_validator
     @field_validator("crew_size")
     def check_crew_size(cls, v: int):
         if not (1 <= v <= 20):
-            raise ValueError("crew_size must be between 1 and 20 pepole")
+            raise ValueError("crew_size must be between 1 and 20 people")
         return v
 
     @field_validator("power_level")
@@ -84,7 +84,7 @@ def main():
     print("Valid station created:")
     print("ID:", station.station_id)
     print("Name:", station.name)
-    print(f"Crew: {station.crew_size} pepole")
+    print(f"Crew: {station.crew_size} people")
     print(f"Power: {station.power_level}%")
     print(f"Oxygen: {station.oxygen_level}%")
     print("Status:",
