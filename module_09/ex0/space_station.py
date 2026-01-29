@@ -3,57 +3,6 @@ from datetime import datetime
 from typing import Optional
 
 
-"""
-from pydantic import field_validator
-
-    station_id: str
-    name: str
-    crew_size: int
-    power_level: float
-    oxygen_level: float
-    last_maintenance: datetime
-    is_operational: bool = True
-    notes: Optional[str] = None
-
-    @field_validator("station_id")
-    def check_station_id(cls, v: str):
-        if not (3 <= len(v) <= 10):
-            raise ValueError(
-                "station_id must have between 3 and 10 characters")
-        return v
-
-    @field_validator("name")
-    def check_name(cls, v: str):
-        if not (1 <= len(v) <= 50):
-            raise ValueError("name must have between 1 and 50 characters")
-        return v
-
-    @field_validator("crew_size")
-    def check_crew_size(cls, v: int):
-        if not (1 <= v <= 20):
-            raise ValueError("crew_size must be between 1 and 20 people")
-        return v
-
-    @field_validator("power_level")
-    def check_power_level(cls, v: float):
-        if not (0.0 <= v <= 100.0):
-            raise ValueError("power_level must be between 0.0 and 100.0 %")
-        return v
-
-    @field_validator("oxygen_level")
-    def check_oxygen_level(cls, v: float):
-        if not (0.0 <= v <= 100.0):
-            raise ValueError("oxygen_level must be between 0.0 and 100.0 %")
-        return v
-
-    @field_validator("notes")
-    def check_notes(cls, v: str):
-        if not (v is None) and len(v) > 200:
-            raise ValueError("notes must have 200 characters or less")
-        return v
-"""
-
-
 class SpaceStation(BaseModel):
     station_id: str = Field(min_length=3, max_length=10)
     name: str = Field(min_length=1, max_length=50)

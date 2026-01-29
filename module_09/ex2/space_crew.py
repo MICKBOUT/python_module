@@ -65,10 +65,52 @@ class SpaceMission(BaseModel):
             print(ell)
 
 
+def crew_member_creator(crew_member_data: dict) -> CrewMember | None:
+    member = None
+    try:
+        member = CrewMember(
+            member_id=crew_member_data["member_id"],
+            name=crew_member_data["name"],
+            rank=crew_member_data["rank"],
+            age=crew_member_data["age"],
+            specialization=crew_member_data["specialization"],
+            years_experience=crew_member_data["years_experience"]
+        )
+    except Exception:
+        print("Crew member Not created")
+    return member
+
+
 def main() -> None:
     print("Space Mission Crew Validation")
-    print("=========================================")
 
+    # Creation of crew members :
+    saconnor = crew_member_creator({
+        "member_id": "Saconnor",
+        "name": "Sarah Connor",
+        "rank": CrewRanks.COMMANDER,
+        "age": 55,
+        "specialization": "Mission Command",
+        "years_experience": 20,
+    })
+    jsmith = crew_member_creator({
+        "member_id": "Jsmith",
+        "name": "John Smith",
+        "rank": CrewRanks.LIEUTENANT,
+        "age": 25,
+        "specialization": "Navigation",
+        "years_experience": 6,
+    })
+    aljohnso = crew_member_creator({
+        "member_id": "Aljohnso",
+        "name": "Alice Johnson",
+        "rank": CrewRanks.OFFICER,
+        "age": 40,
+        "specialization": "Engineering",
+        "years_experience": 2
+    })
+
+    print("=========================================")
     try:
         mission = SpaceMission(
             mission_id="M2024_MARS",
@@ -76,29 +118,7 @@ def main() -> None:
             destination="Mars",
             launch_date=datetime(2000, 1, 1),
             duration_days=900,
-            crew=[
-                CrewMember(
-                    member_id="Saconnor",
-                    name="Sarah Connor",
-                    rank=CrewRanks.COMMANDER,
-                    age=55,
-                    specialization="Mission Command",
-                    years_experience="20"),
-                CrewMember(
-                    member_id="Jsmith",
-                    name="John Smith",
-                    rank=CrewRanks.LIEUTENANT,
-                    age=25,
-                    specialization=" Navigation",
-                    years_experience="6"),
-                CrewMember(
-                    member_id="Aljohnso",
-                    name="Alice Johnson",
-                    rank=CrewRanks.OFFICER,
-                    age=40,
-                    specialization="Engineering",
-                    years_experience="2")
-                ],
+            crew=[saconnor, jsmith, aljohnso],
             budget_millions=2500.0,
         )
         mission.print_attributes()
@@ -108,7 +128,6 @@ def main() -> None:
 
     print("=========================================")
     print("Expected validation error:")
-
     try:
         mission = SpaceMission(
             mission_id="M2024_MARS",
@@ -116,22 +135,7 @@ def main() -> None:
             destination="Mars",
             launch_date=datetime(2000, 1, 1),
             duration_days=900,
-            crew=[
-                CrewMember(
-                    member_id="Jsmith",
-                    name="John Smith",
-                    rank=CrewRanks.LIEUTENANT,
-                    age=25,
-                    specialization=" Navigation",
-                    years_experience="6"),
-                CrewMember(
-                    member_id="Aljohnso",
-                    name="Alice Johnson",
-                    rank=CrewRanks.OFFICER,
-                    age=40,
-                    specialization="Engineering",
-                    years_experience="2"),
-            ],
+            crew=[jsmith, aljohnso],
             budget_millions=2500.0,
         )
         mission.print_attributes()
