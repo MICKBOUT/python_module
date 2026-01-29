@@ -87,8 +87,8 @@ def main() -> None:
     dispatcher_function = spell_dispatcher()
     print(dispatcher_function(10))
     print(dispatcher_function("Mending"))
-    print(dispatcher_function(["Fire", "Powerfull Fire", "Very Powerfull Fire"
-                               ]))
+    print(dispatcher_function([
+        "Fire", "Powerfull Fire", "Very Powerfull Fire"]))
 
 
 if __name__ == "__main__":
