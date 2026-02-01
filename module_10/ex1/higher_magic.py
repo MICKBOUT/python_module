@@ -42,9 +42,8 @@ def conditional_caster(condition: callable, spell: callable) -> callable:
 
 
 def spell_sequence(spells: list[callable]) -> callable:
-    def chaine(power: int) -> None:
-        for index, spell in enumerate(spells):
-            print(f"{index + 1} - {spell(power)}")
+    def chaine(power: int) -> list:
+        return [spell(power) for spell in spells]
     return chaine
 
 
@@ -85,7 +84,8 @@ def main() -> None:
     print("Testing spell chaine:")
     spell_chaine = spell_sequence([first_spell, second_spell, third_spell])
     print("Cast spell chaine:")
-    spell_chaine(6)
+    for index, ell in enumerate(spell_chaine(6)):
+        print(f"{index + 1} - {ell}")
 
 
 if __name__ == "__main__":
