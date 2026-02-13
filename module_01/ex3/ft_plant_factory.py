@@ -39,12 +39,17 @@ class factory:
     """
     a factory that create plant
     """
+    def create_plant_liste(plants_data: tuple[str, int, int]) -> list[Plant]:
+        """
+        Return a List of plant initalised
+        """
+        return [factory.create_plant(data) for data in plants_data]
+
     def create_plant(data):
         """
-        a factory that create plant
+        A factory that create plant
         """
-        name, height, age = data
-        return Plant(name, height, age)
+        return Plant(*data)
 
 
 if __name__ == "__main__":
@@ -56,6 +61,6 @@ if __name__ == "__main__":
         ("Bamboo", 70, 150),
     ]
 
-    plants = [factory.create_plant(data) for data in plants_data]
+    plants = factory.create_plant_liste(plants_data)
 
-    print(f"Total plants created: {5}")
+    print(f"Total plants created: {len(plants)}")
