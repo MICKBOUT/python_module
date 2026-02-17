@@ -8,8 +8,10 @@ def player_score_analytics_tester() -> None:
     print("=== Player Score Analytics ===")
 
     if len(sys.argv) == 1:
-        print("No scores provided. \
-    Usage: python3 ft_score_analytics.py <score1> <score2> ...")
+        print(
+            "No scores provided. "
+            "Usage: python3 ft_score_analytics.py <score1> <score2> ..."
+        )
 
     else:
         data = sys.argv[1:]

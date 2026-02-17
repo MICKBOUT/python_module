@@ -2,19 +2,6 @@ import sys
 from math import sqrt
 
 
-def index(data: str, ell: str) -> int:
-    """
-    return the index of the first occurence of the ell
-    srearch in the data
-    """
-    index = 0
-    for i in data:
-        if ell == i:
-            return index
-        index += 1
-    raise Exception(f"{ell} not found in {data}")
-
-
 def distance(end_pos, starting_pos: tuple = (0, 0, 0)) -> None:
     """
     calculate the distance between two poitns
@@ -27,19 +14,14 @@ def distance(end_pos, starting_pos: tuple = (0, 0, 0)) -> None:
     print(f"Distance between {starting_pos} and {end_pos}: {dist}")
 
 
-def parcing_sting(data: str) -> tuple:
+def parsing_sting(data: str) -> tuple:
     """
-    parce a string and return the tuple of the x, y, z
+    parse a string and return the tuple of the x, y, z
     if an error ocurre, raise the error
     """
     try:
-        first_comma = index(data, ',')
-        second_comma = index(data[first_comma + 1:], ',') + first_comma + 1
-
-        x = int(data[:first_comma])
-        y = int(data[first_comma + 1:second_comma])
-        z = int(data[second_comma + 1:])
-
+        values = data.split(",")
+        x, y, z = list(map(int, values))  # Unpacking exemple
         pos = tuple((x, y, z))
 
         print(f"Parsed position:: {pos}")
@@ -54,7 +36,7 @@ def manage_string(string: str) -> None:
     procec the string and handle if an error ocure
     """
     try:
-        pos = parcing_sting(string)
+        pos = parsing_sting(string)
     except Exception as e:
         print(f"Error details - Type: {type(e).__name__}, Args: ({e})")
     else:
@@ -72,17 +54,24 @@ def tester_coordinate_system() -> None:
     distance(pos)
 
     valide_string = "3,4,0"
-    print(f'\nParcing coordinates: "{valide_string}"')
+    print(f'\nParsing coordinates: "{valide_string}"')
     manage_string(valide_string)
 
     invalide_string = "abc,def,ghi"
-    print(f'\nParcing invalid coordinates: "{invalide_string}"')
+    print(f'\nParsing invalid coordinates: "{invalide_string}"')
     manage_string(invalide_string)
+    print()
+
+    print("Unpacking demonstration:")
+    player = (3, 4, 0)
+    print(f"Player at x={player[0]}, y={player[1]}, z={player[2]}")
+    x, y, z = player
+    print(f"Coordinates: X={x}, Y={y}, Z={z}")
 
 
 if __name__ == "__main__":
     tester_coordinate_system()
 
     for user_string in sys.argv[1:]:
-        print(f'\nParcing user string: "{user_string}"')
+        print(f'\nParsing user string: "{user_string}"')
         manage_string(user_string)

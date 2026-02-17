@@ -1,144 +1,170 @@
-alice = {
-    "sword": ["weapon", "rare", 1, 500],
-    "potion": ["consumable", "common", 5, 50],
-    "shield": ["armor", "uncommon", 1, 200],
-}
+from sys import argv
 
-bob = {
-    "magic_ring": ["armor", "rare", 1, 250],
-}
-
-player_dict = {
-    "alice": alice,
-    "bob": bob
-}
+usage = "usage: python3 ft_inventory_system.py <item:value> <item:value> ..."
 
 
-def inventory_value(inventory: dict) -> int:
-    """
-    return the value of the inventory of the player
-    """
-    inventory_value = 0
-    for _, _, count, value in inventory.values():
-        inventory_value += count * value
-    return inventory_value
+def parsing_data(data: list[str]) -> bool:
+    try:
+        inventory = {}
+        for d in data:
+            nb_colon = d.count(":")
+            if nb_colon == 0:
+                raise Exception(f'colon (:) Not found in item "{d}"')
+            elif nb_colon > 1:
+                raise Exception(
+                    f'More than 1 colon (:) found in "{d}"')
 
+            item, nb = d.split(':')
 
-def inventory_count(inventory: dict) -> int:
-    """
-    return the number of the item in the inventory of the player
-    """
-    inventory_count = 0
-    for _, _, count, _ in inventory.values():
-        inventory_count += count
-    return inventory_count
+            if len(item) == 0:
+                raise ValueError("Key must not be empty")
+            nb = int(nb)
+            if nb <= 0:
+                raise ValueError("Item count must be a positive int")
 
+            if item in inventory:
+                raise Exception("The item appears more than once in the list.")
 
-def display_inventory(inventory: dict) -> None:
-    """
-    display the inventory of a player
-    """
-    category_count = dict()
-    for name, (category, rarity, count, value) in inventory.items():
-        category_count[category] = category_count.get(category, 0) + count
-        print(f"{name} ({category}, {rarity}): \
-{count}x @ {value} gold each = {count * value} gold")
-
-    print(f"\nInventory value: {inventory_value(inventory)} gold")
-    print(f"Item count: {inventory_count(inventory)} items")
-    # s = "Categories: " +\
-    #     ", ".join(f"{key}({value})" for key, value in category_count.items())
-    str_categories_count = "Categories:"
-    for key, value in category_count.items():
-        str_categories_count += f" {key}({value}),"
-    print(str_categories_count)
-
-
-def transaction(donor: dict, receiver: dict, item: str, quantity: int) -> int:
-    """
-    take (quantity) items for (donor) and give it to (reciver)
-    print the result of the transaction and
-    return 1 if the transaction has occure or -1 otherwise
-    """
-    if donor[item][2] < quantity:
-        print("Not enough item to give")
-        return -1
-    donor[item][2] -= quantity
-    if item in receiver:
-        receiver[item][2] += quantity
+            inventory.update({item: nb})
+    except ValueError as e:
+        print("Data invalid:", e)
+    except Exception as e:
+        print("Data invalid:", e)
     else:
-        receiver[item] = \
-            donor[item][0], donor[item][1], quantity, donor[item][3]
-    if donor[item][2] <= 0:
-        donor.pop(item)
-    print("Transaction successful!")
-    return 1
+        return inventory
 
 
-def most_valuable(player_dict: dict) -> str:
-    """
-    return a str w/ the most valuable platyer in the given list
-    or "No player found" if no player were found
-    """
-    most_valuable = (None, float("-inf"))
-    for name, inventory in player_dict.items():
-        value = inventory_value(inventory)
-        if value > most_valuable[1]:
-            most_valuable = (name, value)
-    if most_valuable[0] is None:
-        return "No player found"
+def inventory_system_analysis(inventory: dict) -> int:
+    print("=== Inventory System Analysis ===")
+    items_count = sum(count for count in inventory.values())
+    print("Total items in inventory:", items_count)
+    print("Unique item types:", len(inventory))
+    print()
+    return items_count
+
+
+def current_inventory(inventory: dict[str, int], items_count: int
+                      ) -> list[str]:
+    print("=== Current Inventory ===")
+    sorted_item_lst = sorted(
+        [item for item in inventory.keys()],
+        key=lambda item: inventory.get(item),
+        reverse=True
+    )
+    for item in sorted_item_lst:
+        item_count = inventory[item]
+        print(
+            f"{item}: "
+            f"{item_count} unit{'s' if item_count > 1 else ''} "
+            f"({round(item_count / items_count * 100, 1)}%)"
+        )
+    print()
+    return sorted_item_lst
+
+
+def inventory_statistics(inventory: dict[str, int], sorted_item_lst: list
+                         ) -> None:
+    print("=== Inventory Statistics ===")
+    if len(inventory) == 1:
+        item = list(inventory.keys())[0]
+        item_count = inventory[item]
+        print(
+            "Only one item in inventory, "
+            "the most and least abundant are the same item.")
+        print(
+            "Only item:",
+            item,
+            f"({item_count} unit{'s' if item_count > 1 else ''})"
+        )
+        print()
+        return None
+
+    most_abundant = sorted_item_lst[0]
+    most_abundant_count = inventory.get(most_abundant)
+    print(
+        "Most abundant:",
+        most_abundant,
+        f"({most_abundant_count} unit{'s' if most_abundant_count > 1 else ''})"
+    )
+    least_abundant = sorted_item_lst[-1]
+    least_abundant_count = inventory.get(least_abundant)
+    print(
+        "Least abundant:",
+        least_abundant,
+        f"({least_abundant_count} "
+        f"unit{'s' if least_abundant_count > 1 else ''})"
+    )
+    print()
+
+
+def item_categories(inventory: dict[str, int]) -> None:
+    print("=== Item Categories ===")
+    abundant = {
+        item: count
+        for item, count in inventory.items()
+        if 10 <= count
+    }
+    if abundant:
+        print("Abundant:", abundant)
+
+    moderate = {
+        item: count
+        for item, count in inventory.items()
+        if 5 <= count < 10
+    }
+    if moderate:
+        print("Moderate:", moderate)
+
+    scarce = {
+        item: count
+        for item, count in inventory.items()
+        if count < 5
+    }
+    if scarce:
+        print("Scarce:", scarce)
+    print()
+    return scarce
+
+
+def managment_suggestions(scarce: dict[str, int]):
+    print("=== Management Suggestions ===")
+    scarce_lst = list(key for key, count in scarce.items() if count == 1)
+    if not scarce_lst:
+        print("No Restock Needed")
     else:
-        return f"{most_valuable[0]} ({most_valuable[1]} gold)"
+        print("Restock needed:", scarce_lst)
+    print()
 
 
-def most_items(player_dict: dict) -> str:
-    """
-    reture the player w/ the bigest number of item
-    or "No player found" if no player were found
-    """
-    most_item = (None, float("-inf"))
-    for name, inventory in player_dict.items():
-        inventory_value = inventory_count(inventory)
-        if inventory_value > most_item[1]:
-            most_item = (name, inventory_value)
-    if most_item[0] is None:
-        return "No player found"
-    else:
-        return f"{most_item[0]} ({most_item[1]} items)"
+def dictionary_properties_demo(inventory: dict[int, str]) -> None:
+    print("=== Dictionary Properties Demo ===")
+    print(f"Dictionary keys: {', '.join(inventory)}")
+    print("Dictionary values:", str(list(inventory.values()))[1:-1])
+    item = 'sword'
+    print(f"Sample lookup - '{item}' in inventory:", item in inventory)
 
 
-def rare_items(player_dict: dict) -> str:
-    """
-    return a str containing all rare item present in any invenrory
-    """
-    rare_items = set()
-
-    for inventory in player_dict.values():
-        for name, (_, rarity, _, _) in inventory.items():
-            if rarity == "rare":
-                rare_items.add(name)
-    return f"{rare_items}"[1:-1]
+def manage_inventory(inventory: dict) -> None:
+    items_count = inventory_system_analysis(inventory)
+    sorted_item_lst = current_inventory(inventory, items_count)
+    inventory_statistics(inventory, sorted_item_lst)
+    scarce = item_categories(inventory)
+    managment_suggestions(scarce)
+    dictionary_properties_demo(inventory)
 
 
-def Player_inventory_tester() -> None:
-    """
-    a tester that print test for this subject
-    """
-    print("=== Player Inventory System ===\n")
-    display_inventory(alice)
+def main() -> None:
+    if len(argv) == 1:
+        print(usage)
+        return None
 
-    print("\n=== Transaction: Alice gives Bob 2 potions ===")
-    transaction(alice, bob, "potion", 2)
+    inventory = parsing_data(argv[1:])
+    if inventory is None:
+        print(usage)
+        return None
 
-    print("\n=== Updated Inventories ===")
-    print(f"Alice potions: {alice['potion'][2]}")
-    print(f"Bob potions: {bob['potion'][2]}")
-
-    print("\n=== Inventory Analytics ===")
-    print(f"Most valuable player: {most_valuable(player_dict)}")
-    print(f"Most items: {most_items(player_dict)}")
-    print(f"Rarest items: {rare_items(player_dict)}")
+    manage_inventory(inventory)
 
 
 if __name__ == "__main__":
-    Player_inventory_tester()
+    main()

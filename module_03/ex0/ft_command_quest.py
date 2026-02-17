@@ -2,9 +2,7 @@ import sys
 
 
 def command_quest_tester() -> None:
-    """
-    Basic tests to show how to print arg
-    """
+    """ Basic tests to show how to print arg """
     print("=== Command Quest ===")
 
     if len(sys.argv) == 1:
